@@ -42,26 +42,22 @@ public class Menu extends ArrayList<String>{
             System.out.println(i+"-"+count++ + "-"+s);
     }
 
-    public void addChoice(String s) {
-        this.add(s);
-    }
-
     public void printMenu() {
         int i=1;
         for (String s:this)
             System.out.println(i++ + "-" +s);
-        System.out.println("Others - Quit program");
+        System.out.println("Others - Quit this menu");
     }
 
     public int getMenuChoice() {
-        System.out.println("+++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++");
 
         this.printMenu();
 
         Scanner sc = new Scanner(System.in);
         System.out.println("User option:");
 
-        System.out.println("+++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++");
 
         int subChoice = Integer.parseInt(sc.nextLine());
         return subChoice;

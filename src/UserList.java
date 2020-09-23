@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.util.*;
 
 public class UserList extends ArrayList<User> {
+    final String PATH = System.getProperty("user.dir") + "/user.txt";
+
     public UserList() {
     }
 
@@ -30,8 +32,7 @@ public class UserList extends ArrayList<User> {
     }
 
     private boolean checkPhone(String s) {
-        if (s.length()!=10) return false;
-        if (!s.matches("^[0]\\d+$]")) return false;
+        if (!s.matches("^[0]\\d{9}$")) return false;
         return true;
     }
 
@@ -49,6 +50,7 @@ public class UserList extends ArrayList<User> {
         Scanner sc = new Scanner(System.in);
         String username, password;
 
+        System.out.println("Logging in...");
         System.out.println("Enter username: ");
         username = sc.nextLine();
         if(!checkNull(username)) {
@@ -74,10 +76,9 @@ public class UserList extends ArrayList<User> {
 
     //check exist with argument
     private boolean checkExist(String username) {
-        String path = "..\\user.txt";
 
         try {
-            File f = new File(path);
+            File f = new File(PATH);
             Scanner reader = new Scanner(f);
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
@@ -125,14 +126,14 @@ public class UserList extends ArrayList<User> {
         String username, fName, lName, password, confirm, phone, email;
 
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter new username:");
+        System.out.println("Enter new username:");
         username = sc.nextLine();
         if (this.search(username)!=-1) {
             System.out.println("Error: Username existed!");
             return false;
         }
 
-        System.out.print("Enter first name:");
+        System.out.println("Enter first name:");
         fName = sc.nextLine();
         if (!checkNull(fName)) {
             System.out.println("Error: Input cannot be null!");
@@ -235,8 +236,8 @@ public class UserList extends ArrayList<User> {
         }
         else {
             System.out.println("User information: ");
-            for (User user: this)
-                user.toString();
+            for (User user: list)
+                System.out.println(user.toString());
         }
 
         return true;
@@ -324,16 +325,12 @@ public class UserList extends ArrayList<User> {
 
     //write list to file
     public boolean writeFile() {
-        String path = "..\\user.txt";
 
         try {
-            FileWriter writer = new FileWriter(path);
+            FileWriter writer = new FileWriter(PATH);
 
-            int i=0;
-            while (!this.isEmpty()) {
-                //write username only
-                writer.write(this.get(i++).getUsername());
-            }
+            for (int i=0; i<this.size(); i++)
+                writer.write(this.get(i).getUsername());
 
             writer.close();
         } catch (IOException e) {
@@ -345,11 +342,11 @@ public class UserList extends ArrayList<User> {
     }
 
     //print list in file
+    //note: no sort
     public boolean printFile() {
-        String path = "..\\user.txt";
 
         try {
-            File f = new File(path);
+            File f = new File(PATH);
             Scanner reader = new Scanner(f);
 
             while (reader.hasNextLine()) {
