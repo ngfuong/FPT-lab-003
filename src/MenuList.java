@@ -19,8 +19,8 @@ public class MenuList extends ArrayList<Menu> {
 
         System.out.println("+++++++++++++++++++++++");
         System.out.println("User choice: ");
-        int choice = Integer.parseInt(sc.nextLine());
+        //return choice
+        return Integer.parseInt(sc.nextLine());
 
-        return choice;
     }
 }

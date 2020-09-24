@@ -8,9 +8,8 @@ public class Menu extends ArrayList<String>{
     public Menu() {
     }
 
-    public Menu(String name, String choice) {
+    public Menu(String name) {
         this.name = name;
-        this.choice = choice;
     }
 
     public String getName() {
@@ -59,7 +58,7 @@ public class Menu extends ArrayList<String>{
 
         System.out.println("+++++++++++++++++++++++");
 
-        int subChoice = Integer.parseInt(sc.nextLine());
-        return subChoice;
+        //return subChoice
+        return Integer.parseInt(sc.nextLine());
     }
 }

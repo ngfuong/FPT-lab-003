@@ -9,7 +9,7 @@ public class UserList extends ArrayList<User> {
     public UserList() {
     }
 
-    /**BEGIN DATA VALIDATION*/
+    /*BEGIN OF DATA VALIDATION*/
     //search username in list
     private int search(String username) {
         for (int i=0; i<this.size();i++)
@@ -18,33 +18,21 @@ public class UserList extends ArrayList<User> {
 
         return -1;
     }
-
-    private boolean checkNull(String s){
-        if (s.length()==0)
-            return false;
-        return true;
+    private boolean isNull(String s){
+        return (s.length()==0);
     }
-
-    private boolean checkPassword(String s) {
-        if (s.length()<6) return false;
-        if (s.matches("\\s")) return false;
-        return true;
+    private boolean isPassword(String s) {
+        return !(s.matches("\\s") && (s.length()<6));
     }
-
-    private boolean checkPhone(String s) {
-        if (!s.matches("^[0]\\d{9}$")) return false;
-        return true;
+    private boolean isPhone(String s) {
+        return s.matches("^[0]\\d{9}$");
     }
-
-    private boolean checkEmail(String s) {
-        if (!s.matches("^\\S+[@]?\\S+[.]?\\S+$"))
-            return false;
-        return true;
+    private boolean isEmail(String s) {
+        return s.matches("^\\S+[@]?\\S+[.]?\\S+$");
     }
-    /**END OF DATA VALIDATION*/
+    /*END OF DATA VALIDATION*/
 
-
-    /**BEGIN UTILITY*/
+    /*BEGIN OF UTILITY*/
     //user login
     public int login() {
         Scanner sc = new Scanner(System.in);
@@ -53,7 +41,7 @@ public class UserList extends ArrayList<User> {
         System.out.println("Logging in...");
         System.out.println("Enter username: ");
         username = sc.nextLine();
-        if(!checkNull(username)) {
+        if(isNull(username)) {
             System.out.println("Error: Input cannot be null!");
             return -1;
         }
@@ -73,7 +61,6 @@ public class UserList extends ArrayList<User> {
         }
         return pos;
     }
-
     //check exist with argument
     private boolean checkExist(String username) {
 
@@ -96,31 +83,29 @@ public class UserList extends ArrayList<User> {
             return false;
         }
     }
-
     //encrypt password
     public String encrypt(String s) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(s.getBytes(StandardCharsets.UTF_8));
-            String encoded = Base64.getEncoder().encodeToString(hash);
-            return encoded;
+            //encode
+            return  Base64.getEncoder().encodeToString(hash);
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Encryption failed!");
             return null;
         }
     }
-
     //print operation status
     public void printStatus (boolean status) {
         if (status)
             System.out.println("Operation: Successful!");
         else System.out.println("Operation: Failed!");
     }
-    /**END OF UTILITY*/
+    /*END OF UTILITY*/
 
-
-    /**BEGIN OPTIONS*/
+    /*BEGIN OF OPTIONS*/
     //add new user
     public boolean addUser() {
         String username, fName, lName, password, confirm, phone, email;
@@ -135,21 +120,21 @@ public class UserList extends ArrayList<User> {
 
         System.out.println("Enter first name:");
         fName = sc.nextLine();
-        if (!checkNull(fName)) {
+        if (isNull(fName)) {
             System.out.println("Error: Input cannot be null!");
             return false;
         }
 
         System.out.println("Enter last name:");
         lName = sc.nextLine();
-        if (!checkNull(lName)) {
+        if (isNull(lName)) {
             System.out.println("Error: Input cannot be null!");
             return false;
         }
 
         System.out.println("Enter password:");
         password = sc.nextLine();
-        if (!checkPassword(password)) {
+        if (!isPassword(password)) {
             System.out.println("Error: Password must be over-6-char long and has no spaces!");
             return false;
         }
@@ -164,14 +149,14 @@ public class UserList extends ArrayList<User> {
 
         System.out.println("Enter phone: ");
         phone = sc.nextLine();
-        if (!checkPhone(phone)) {
+        if (!isPhone(phone)) {
             System.out.println("Error: Invalid number!");
             return false;
         }
 
         System.out.println("Enter email: ");
         email = sc.nextLine();
-        if (!checkEmail(email)) {
+        if (!isEmail(email)) {
             System.out.println("Error: Invalid email!");
             return false;
         }
@@ -188,7 +173,7 @@ public class UserList extends ArrayList<User> {
         System.out.println("Enter username to check: ");
         String username = sc.nextLine();
 
-        if (!checkNull(username)) {
+        if (isNull(username)) {
             System.out.println("Error: Input cannot be null!");
             return false;
         }
@@ -209,7 +194,7 @@ public class UserList extends ArrayList<User> {
 
         System.out.println("Enter name to search: ");
         name = sc.nextLine();
-        if (!checkNull(name)) {
+        if (isNull(name)) {
             System.out.println("Error: Input cannot be null!");
             return false;
         }
@@ -263,8 +248,8 @@ public class UserList extends ArrayList<User> {
         System.out.println("Update password: ");
         password = sc.nextLine();
         //update password
-        if (checkNull(password)) {
-            if (!checkPassword(password)) {
+        if (!isNull(password)) {
+            if (!isPassword(password)) {
                 System.out.println("Error: Password must have over characters and contain no space!");
                 return false;
             }
@@ -281,7 +266,7 @@ public class UserList extends ArrayList<User> {
         System.out.println("Update phone: ");
         phone = sc.nextLine();
         //update phone
-        if (checkNull(phone)&&checkPhone(phone)) {
+        if (!isNull(phone) && !isPhone(phone)) {
             System.out.println("Error: Invalid number!");
             return false;
         }
@@ -289,20 +274,20 @@ public class UserList extends ArrayList<User> {
         System.out.println("Update email: ");
         email = sc.nextLine();
         //update email
-        if (checkNull(email)&&checkEmail(email)) {
+        if (!isNull(email) && !isEmail(email)) {
             System.out.println("Error: Invalid email!");
             return false;
         }
 
         //update
-        if (checkNull(fName)) this.get(pos).setfName(fName);
-        if (checkNull(lName)) this.get(pos).setlName(lName);
-        if (checkNull(password)) {
+        if (!isNull(fName)) this.get(pos).setfName(fName);
+        if (!isNull(lName)) this.get(pos).setlName(lName);
+        if (!isNull(password)) {
             this.get(pos).setPassword(password);
             this.get(pos).setConfirm(password);
         }
-        if (checkNull(phone)) this.get(pos).setPhone(phone);
-        if (checkNull(email)) this.get(pos).setEmail(email);
+        if (!isNull(phone)) this.get(pos).setPhone(phone);
+        if (!isNull(email)) this.get(pos).setEmail(email);
         return true;
     }
 
@@ -317,7 +302,7 @@ public class UserList extends ArrayList<User> {
         }
 
         System.out.println("Confirm delete? [Y/n]");
-        if (sc.nextLine()=="Y") this.remove(pos);
+        if (sc.nextLine().equals("Y")) this.remove(pos);
         else return false;          //do nothing
 
         return true;
@@ -329,8 +314,7 @@ public class UserList extends ArrayList<User> {
         try {
             FileWriter writer = new FileWriter(PATH);
 
-            for (int i=0; i<this.size(); i++)
-                writer.write(this.get(i).getUsername());
+            for (User user : this) writer.write(user.getUsername());
 
             writer.close();
         } catch (IOException e) {
@@ -361,6 +345,6 @@ public class UserList extends ArrayList<User> {
         }
         return true;
     }
-    /**END OF OPTIONS*/
+    /*END OF OPTIONS*/
 }
 

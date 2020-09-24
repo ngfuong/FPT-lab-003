@@ -1,38 +1,27 @@
 public class App {
 
-    public static void main(String args[]) {
+    public static void main(String[] argv) {
         UserList userList = new UserList();
 
         MenuList mainList = new MenuList();
 
-        Menu addUser = new Menu();
-        Menu checkExist = new Menu();
-        Menu searchName = new Menu();
-        Menu updateUser = new Menu();
-        Menu writeFile = new Menu();
-        Menu printFile = new Menu();
-
-        mainList.add(addUser);
-        addUser.setName("Add new user");
-
-        mainList.add(checkExist);
-        checkExist.setName("Check user existence");
-
-        mainList.add(searchName);
-        searchName.setName("Search user info by name");
-
-        mainList.add(updateUser);
-        updateUser.setName("Update user");
+        Menu addUser = new Menu("Add new user");
+        Menu checkExist = new Menu("Check user existence");
+        Menu searchName = new Menu("Get user info by name");
+        Menu updateUser = new Menu("Update user");
         updateUser.add("Update user");
         updateUser.add("Delete user");
+        Menu writeFile = new Menu("Save user list to file");
+        Menu printFile = new Menu("Print user list from file");
 
+        mainList.add(addUser);
+        mainList.add(checkExist);
+        mainList.add(searchName);
+        mainList.add(updateUser);
         mainList.add(writeFile);
-        writeFile.setName("Save user list to file");
-
         mainList.add(printFile);
-        printFile.setName("Print user list from file");
 
-        /**BEGIN MAIN MENU*/
+        /*BEGIN MAIN MENU*/
         int listChoice;
         do {
             listChoice = mainList.getListChoice();
@@ -92,8 +81,8 @@ public class App {
                 }
             }
 
-        } while (listChoice <= mainList.size() && listChoice >= 0);
-        /**END OF MAIN MENU*/
+        } while (listChoice <= mainList.size() && listChoice >= 1);
+        /*END OF MAIN MENU*/
 
     }
 }
