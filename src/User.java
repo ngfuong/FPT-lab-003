@@ -74,34 +74,14 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(username, user.username) &&
-                Objects.equals(fName, user.fName) &&
-                Objects.equals(lName, user.lName) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(confirm, user.confirm) &&
-                Objects.equals(phone, user.phone) &&
-                Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, fName, lName, password, confirm, phone, email);
-    }
-
-    @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
-                ", fName='" + fName + '\'' +
-                ", lName='" + lName + '\'' +
-                ", password='" + password + '\'' +
-                ", confirm='" + confirm + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
+                "username:'" + username + '\'' +
+                ",fName:'" + fName + '\'' +
+                ",lName:'" + lName + '\'' +
+                ",password:'" + password + '\'' +
+                ",phone:'" + phone + '\'' +
+                ",email:'" + email + '\'' +
                 '}';
     }
 }

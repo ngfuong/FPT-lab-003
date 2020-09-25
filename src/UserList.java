@@ -2,6 +2,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.regex.*;
 
 public class UserList extends ArrayList<User> {
     final String PATH = System.getProperty("user.dir") + "/user.txt";
@@ -57,9 +58,9 @@ public class UserList extends ArrayList<User> {
             System.out.println("Enter password: ");
             password = sc.nextLine();
             pos = search(username);
-            if (!password.equals(this.get(pos).getPassword()))
+            if (!encrypt(password).equals(this.get(pos).getPassword()))
                 System.out.println("Error: Wrong password!");
-        } while (!password.equals(this.get(pos).getPassword()));
+        } while (!encrypt(password).equals(this.get(pos).getPassword()));
 
         System.out.println("Logged in successfully!");
         return pos;
@@ -73,10 +74,7 @@ public class UserList extends ArrayList<User> {
 
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                if (line.equals(username)) {
-                    System.out.println("User " +username+ " exist!");
-                    return true;
-                }
+                if (line.contains(username)) return true;
             }
             System.out.println("Error: No user found!");
             return false;
@@ -121,7 +119,7 @@ public class UserList extends ArrayList<User> {
                 System.out.println("Error: Username must have at least 5 characters and no spaces");
             if (search(username) != -1)
                 System.out.println("Error: Username existed!");
-        } while (search(username)!=-1 && !isUsername(username));
+        } while (search(username)!=-1 | !isUsername(username));
 
         do {
             System.out.println("Enter first name:");
@@ -215,14 +213,7 @@ public class UserList extends ArrayList<User> {
             if (fullName.contains(name)) list.add(this.get(i));
         }
         //sort by first name
-        Collections.sort(list, new Comparator<User>() {
-            @Override
-            public int compare(User user1, User user2) {
-                if (user1.fName.compareTo(user2.fName)>0) return 1;
-                if (user1.fName.compareTo(user2.fName)<0) return -1;
-                return 0;
-            }
-        });
+        Collections.sort(list, new SortByFirstName());
 
         if (list.isEmpty()) {
             System.out.println("No user found!");
@@ -241,9 +232,13 @@ public class UserList extends ArrayList<User> {
         Scanner sc = new Scanner(System.in);
         String fName, lName, password, confirm, phone, email;
 
+        if (this.isEmpty()) {
+            System.out.println("Error: List empty!");
+            return false;
+        }
+
         int pos = login();
         if (pos==-1) {
-            System.out.println("Error: Login failed!");
             return false;
         }
 
@@ -302,6 +297,11 @@ public class UserList extends ArrayList<User> {
     public boolean deleteUser() {
         Scanner sc = new Scanner(System.in);
 
+        if (this.isEmpty()) {
+            System.out.println("Error: List empty!");
+            return false;
+        }
+
         int pos = login();
         if (pos==-1) {
             System.out.println("Error: Login failed!");
@@ -320,7 +320,11 @@ public class UserList extends ArrayList<User> {
     //write list to file
     public boolean writeFile() {
         try {
-            FileWriter writer = new FileWriter(PATH);
+            File f = new File(PATH);
+            if (!f.exists()) f.createNewFile();
+
+            //append == true
+            FileWriter writer = new FileWriter(f.getName(), true);
             for (User user : this) writer.write(user.toString()+"\n");
             writer.close();
 
@@ -336,14 +340,33 @@ public class UserList extends ArrayList<User> {
     public boolean printFile() {
         try {
             File f = new File(PATH);
+            if (!f.exists()) return false;
+
             Scanner reader = new Scanner(f);
 
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                System.out.println(line);
-            }
+                //Matcher matcher = Pattern.compile("[='](.+)[']").matcher(line);
+                String username = line.split("[=',]")[2];
+                String fName = line.split("[=',]")[4];
+                String lName = line.split("[=',]")[6];
+                String password = line.split("[=',]")[8];
+                String confirm = password;
+                String phone = line.split("[{}:']")[10];
+                String email = line.split("[{}:']")[12];
 
+                System.out.println(username + fName + lName + password + confirm + phone + email);
+                //add user to current session's list
+                int pos = this.search(username);
+                if (pos==-1) this.add(new User(username, fName, lName, password, confirm, phone, email));
+            }
             reader.close();
+
+            //printing
+            Collections.sort(this, new SortByFirstName());
+            for (User user: this)
+                System.out.println(user.toString());
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error: Printing file failed!");
