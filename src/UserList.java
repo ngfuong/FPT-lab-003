@@ -358,11 +358,15 @@ public class UserList extends ArrayList<User> {
                 System.out.println(username + fName + lName + password + confirm + phone + email);
                 //add user to current session's list
                 int pos = this.search(username);
-                if (pos==-1) this.add(new User(username, fName, lName, password, confirm, phone, email));
+                if (pos==-1){
+                    this.add(new User(username, fName, lName, password, confirm, phone, email));
+                    System.out.println("User " + username+ " added!");
+                }
             }
             reader.close();
 
             //printing
+            System.out.println("Printing all...");
             Collections.sort(this, new SortByFirstName());
             for (User user: this)
                 System.out.println(user.toString());
