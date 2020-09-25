@@ -1,0 +1,2 @@
+User{username:'linh123',fName:'linh',lName:'nguyen',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0768856268',email:'linh@gmail.com'}
+User{username:'linh123',fName:'phuong',lName:'nguyen',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0768856268',email:'linh@gmail.com'}

@@ -1,5 +1,3 @@
-import java.util.Objects;
-
 public class User {
     String username, fName, lName, password, confirm, phone, email;
 

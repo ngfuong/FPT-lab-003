@@ -2,7 +2,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
-import java.util.regex.*;
 
 public class UserList extends ArrayList<User> {
     final String PATH = System.getProperty("user.dir") + "/user.txt";
@@ -23,16 +22,16 @@ public class UserList extends ArrayList<User> {
         return (s.length()==0);
     }
     private boolean isUsername(String s) {
-        return (s.length()>=5 && !s.matches("\\s"));
+        return (s.length()>=5 && !s.contains(" "));
     }
     private boolean isPassword(String s) {
-        return !(s.matches("\\s") && (s.length()<6));
+        return (!s.contains(" ") && s.length()>=6);
     }
     private boolean isPhone(String s) {
         return s.matches("^[0]\\d{9}$");
     }
     private boolean isEmail(String s) {
-        return s.matches("^\\S+[@]?\\S+[.]?\\S+$");
+        return s.matches("^\\S+[@]\\S+[.]\\S+$");
     }
     /*END OF DATA VALIDATION*/
 
@@ -48,11 +47,19 @@ public class UserList extends ArrayList<User> {
         do {
             System.out.println("Enter username: ");
             username = sc.nextLine();
-            if (isNull(username))
-                System.out.println("Error: Input cannot be null!");
-            if (!checkExist(username))
-                System.out.println("Error: Username not exist!");
-        } while (isNull(username) | !(checkExist(username)));
+            //if (isNull(username)) System.out.println("Error: Input cannot be null!");
+            if (checkExist(username)==0) {
+                System.out.println("Error: Read file failed!!");
+                return -1;
+            }
+            else if (checkExist(username)==-1) {
+                System.out.println("Error: File empty!");
+                return -1;
+            }
+            else if (checkExist(username)==-2)
+                System.out.println("Error: User name not exist!");
+
+        } while (/*isNull(username) |*/ checkExist(username)==-2);
 
         do {
             System.out.println("Enter password: ");
@@ -66,23 +73,28 @@ public class UserList extends ArrayList<User> {
         return pos;
     }
     //check exist with argument
-    private boolean checkExist(String username) {
+    private int checkExist(String username) {
 
         try {
             File f = new File(PATH);
+            if (f.length()==0) {
+                //file empty
+                return -1;
+            }
             Scanner reader = new Scanner(f);
 
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                if (line.contains(username)) return true;
+                //exist
+                if (line.contains(username)) return 1;
             }
-            System.out.println("Error: No user found!");
-            return false;
+            //not exist
+            return -2;
         }
         catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error: Read file failed!");
-            return false;
+            //read failed
+            return 0;
         }
     }
     //encrypt password
@@ -186,7 +198,7 @@ public class UserList extends ArrayList<User> {
                 System.out.println("Error: Input cannot be null!");
         } while (isNull(username));
 
-        return checkExist(username);
+        return (checkExist(username)==1);
     }
     //search information by name
     //output list of user info
@@ -232,10 +244,11 @@ public class UserList extends ArrayList<User> {
         Scanner sc = new Scanner(System.in);
         String fName, lName, password, confirm, phone, email;
 
+        /*
         if (this.isEmpty()) {
-            System.out.println("Error: List empty!");
             return false;
         }
+        */
 
         int pos = login();
         if (pos==-1) {
@@ -318,6 +331,7 @@ public class UserList extends ArrayList<User> {
         return true;
     }
     //write list to file
+    //****************UPDATE THIS
     public boolean writeFile() {
         try {
             File f = new File(PATH);
@@ -346,16 +360,15 @@ public class UserList extends ArrayList<User> {
 
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                //Matcher matcher = Pattern.compile("[='](.+)[']").matcher(line);
-                String username = line.split("[=',]")[2];
-                String fName = line.split("[=',]")[4];
-                String lName = line.split("[=',]")[6];
-                String password = line.split("[=',]")[8];
+                String delim = "[{}:',]+";
+                String username = line.split(delim)[2];
+                String fName = line.split(delim)[4];
+                String lName = line.split(delim)[6];
+                String password = line.split(delim)[8];
                 String confirm = password;
-                String phone = line.split("[{}:']")[10];
-                String email = line.split("[{}:']")[12];
+                String phone = line.split(delim)[10];
+                String email = line.split(delim)[12];
 
-                System.out.println(username + fName + lName + password + confirm + phone + email);
                 //add user to current session's list
                 int pos = this.search(username);
                 if (pos==-1){
