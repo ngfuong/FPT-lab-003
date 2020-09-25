@@ -21,6 +21,9 @@ public class UserList extends ArrayList<User> {
     private boolean isNull(String s){
         return (s.length()==0);
     }
+    private boolean isUsername(String s) {
+        return (s.length()>=5 && !s.matches("\\s"));
+    }
     private boolean isPassword(String s) {
         return !(s.matches("\\s") && (s.length()<6));
     }
@@ -37,28 +40,28 @@ public class UserList extends ArrayList<User> {
     public int login() {
         Scanner sc = new Scanner(System.in);
         String username, password;
+        int pos;
 
         System.out.println("Logging in...");
-        System.out.println("Enter username: ");
-        username = sc.nextLine();
-        if(isNull(username)) {
-            System.out.println("Error: Input cannot be null!");
-            return -1;
-        }
 
-        if (!checkExist(username)) return -1;
+        do {
+            System.out.println("Enter username: ");
+            username = sc.nextLine();
+            if (isNull(username))
+                System.out.println("Error: Input cannot be null!");
+            if (!checkExist(username))
+                System.out.println("Error: Username not exist!");
+        } while (isNull(username) | !(checkExist(username)));
 
-        System.out.println("Enter password: ");
-        password = sc.nextLine();
+        do {
+            System.out.println("Enter password: ");
+            password = sc.nextLine();
+            pos = search(username);
+            if (!password.equals(this.get(pos).getPassword()))
+                System.out.println("Error: Wrong password!");
+        } while (!password.equals(this.get(pos).getPassword()));
 
-        int pos = search(username);
-        if (!password.equals(this.get(pos).getPassword())) {
-            System.out.println("Error: Wrong password!");
-            return -1;
-        }
-        else {
-            System.out.println("Logged in successfully!");
-        }
+        System.out.println("Logged in successfully!");
         return pos;
     }
     //check exist with argument
@@ -67,10 +70,11 @@ public class UserList extends ArrayList<User> {
         try {
             File f = new File(PATH);
             Scanner reader = new Scanner(f);
+
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
                 if (line.equals(username)) {
-                    System.out.println("User exist!");
+                    System.out.println("User " +username+ " exist!");
                     return true;
                 }
             }
@@ -99,8 +103,7 @@ public class UserList extends ArrayList<User> {
     }
     //print operation status
     public void printStatus (boolean status) {
-        if (status)
-            System.out.println("Operation: Successful!");
+        if (status) System.out.println("Operation: Successful!");
         else System.out.println("Operation: Failed!");
     }
     /*END OF UTILITY*/
@@ -109,78 +112,84 @@ public class UserList extends ArrayList<User> {
     //add new user
     public boolean addUser() {
         String username, fName, lName, password, confirm, phone, email;
-
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter new username:");
-        username = sc.nextLine();
-        if (this.search(username)!=-1) {
-            System.out.println("Error: Username existed!");
+
+        do {
+            System.out.println("Enter new username:");
+            username = sc.nextLine();
+            if (!isUsername(username))
+                System.out.println("Error: Username must have at least 5 characters and no spaces");
+            if (search(username) != -1)
+                System.out.println("Error: Username existed!");
+        } while (search(username)!=-1 && !isUsername(username));
+
+        do {
+            System.out.println("Enter first name:");
+            fName = sc.nextLine();
+            if (isNull(fName))
+                System.out.println("Error: Input cannot be null!");
+        } while (isNull(fName));
+
+        do {
+            System.out.println("Enter last name:");
+            lName = sc.nextLine();
+            if (isNull(lName))
+                System.out.println("Error: Input cannot be null!");
+        } while (isNull(lName));
+
+        do {
+            System.out.println("Enter password:");
+            password = sc.nextLine();
+            if (!isPassword(password))
+                System.out.println("Error: Password must have at least 6 characters and no spaces!");
+        } while (!isPassword(password));
+
+        do {
+            System.out.println("Confirm password: ");
+            confirm = sc.nextLine();
+
+            if (!password.equals(confirm)) System.out.println("Error: Password does not match!");
+            else password = confirm = encrypt(password);
+
+        } while (!password.equals(confirm));
+
+        do {
+            System.out.println("Enter phone: ");
+            phone = sc.nextLine();
+            if (!isPhone(phone))
+                System.out.println("Error: Invalid number!");
+        } while (!isPhone(phone));
+
+        do {
+            System.out.println("Enter email: ");
+            email = sc.nextLine();
+            if (!isEmail(email))
+                System.out.println("Error: Invalid email!");
+        } while (!isEmail(email));
+
+        try {
+            this.add(new User(username, fName, lName, password, confirm, phone, email));
+            return true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-
-        System.out.println("Enter first name:");
-        fName = sc.nextLine();
-        if (isNull(fName)) {
-            System.out.println("Error: Input cannot be null!");
-            return false;
-        }
-
-        System.out.println("Enter last name:");
-        lName = sc.nextLine();
-        if (isNull(lName)) {
-            System.out.println("Error: Input cannot be null!");
-            return false;
-        }
-
-        System.out.println("Enter password:");
-        password = sc.nextLine();
-        if (!isPassword(password)) {
-            System.out.println("Error: Password must be over-6-char long and has no spaces!");
-            return false;
-        }
-
-        System.out.println("Confirm password: ");
-        confirm = sc.nextLine();
-        if (!password.equals(confirm)) {
-            System.out.println("Error: Password does not match!");
-            return false;
-        }
-        else password = confirm = encrypt(password);
-
-        System.out.println("Enter phone: ");
-        phone = sc.nextLine();
-        if (!isPhone(phone)) {
-            System.out.println("Error: Invalid number!");
-            return false;
-        }
-
-        System.out.println("Enter email: ");
-        email = sc.nextLine();
-        if (!isEmail(email)) {
-            System.out.println("Error: Invalid email!");
-            return false;
-        }
-
-        this.add(new User(username, fName, lName, password, confirm, phone, email));
-
-        return true;
     }
-
     //check exist
     public boolean checkExist() {
         Scanner sc = new Scanner(System.in);
+        String username;
 
-        System.out.println("Enter username to check: ");
-        String username = sc.nextLine();
-
-        if (isNull(username)) {
-            System.out.println("Error: Input cannot be null!");
-            return false;
-        }
+        do {
+            System.out.println("Enter username to check: ");
+            username = sc.nextLine();
+            if (isNull(username))
+                System.out.println("Error: Input cannot be null!");
+        } while (isNull(username));
 
         return checkExist(username);
     }
-
     //search information by name
     //output list of user info
     public boolean searchName() {
@@ -192,12 +201,12 @@ public class UserList extends ArrayList<User> {
             return false;
         }
 
-        System.out.println("Enter name to search: ");
-        name = sc.nextLine();
-        if (isNull(name)) {
-            System.out.println("Error: Input cannot be null!");
-            return false;
-        }
+        do {
+            System.out.println("Enter name to search: ");
+            name = sc.nextLine();
+            if (isNull(name))
+                System.out.println("Error: Input cannot be null!");
+        } while (isNull(name));
 
         ArrayList<User> list = new ArrayList<>();
 
@@ -227,7 +236,6 @@ public class UserList extends ArrayList<User> {
 
         return true;
     }
-
     //update user - update
     public boolean updateUser() {
         Scanner sc = new Scanner(System.in);
@@ -245,39 +253,39 @@ public class UserList extends ArrayList<User> {
         System.out.println("Update last name: ");
         lName = sc.nextLine();
 
-        System.out.println("Update password: ");
-        password = sc.nextLine();
-        //update password
-        if (!isNull(password)) {
-            if (!isPassword(password)) {
-                System.out.println("Error: Password must have over characters and contain no space!");
-                return false;
-            }
+        do {
+            System.out.println("Update password: ");
+            password = sc.nextLine();
+            //update password
+            if (!isNull(password))
+                if (!isPassword(password))
+                    System.out.println("Error: Password must have over characters and contain no space!");
+                else {
+                     do {
+                         System.out.println("Confirm new password: ");
+                         confirm = sc.nextLine();
+                         if (!confirm.equals(password)) System.out.println("Error: Password does not match!");
+                     } while (!confirm.equals(password));
 
-            System.out.println("Confirm new password: ");
-            confirm = sc.nextLine();
-            if (!confirm.equals(password)) {
-                System.out.println("Error: Password does not match!");
-                return false;
-            }
-            else password = encrypt(password);
-        }
+                     password = encrypt(password);
+                }
 
-        System.out.println("Update phone: ");
-        phone = sc.nextLine();
-        //update phone
-        if (!isNull(phone) && !isPhone(phone)) {
-            System.out.println("Error: Invalid number!");
-            return false;
-        }
+        } while (!isNull(password) && !isPassword(password));
 
-        System.out.println("Update email: ");
-        email = sc.nextLine();
-        //update email
-        if (!isNull(email) && !isEmail(email)) {
-            System.out.println("Error: Invalid email!");
-            return false;
-        }
+        do {
+            System.out.println("Update phone: ");
+            phone = sc.nextLine();
+            //update phone
+            if (!isNull(phone) && !isPhone(phone))
+                System.out.println("Error: Invalid number!");
+        } while (!isNull(phone) && !isPhone(phone));
+
+        do {
+            System.out.println("Update email: ");
+            email = sc.nextLine();
+            //update email
+            if (!isNull(email) && !isEmail(email)) System.out.println("Error: Invalid email!");
+        } while (!isNull(email) && !isEmail(email));
 
         //update
         if (!isNull(fName)) this.get(pos).setfName(fName);
@@ -290,7 +298,6 @@ public class UserList extends ArrayList<User> {
         if (!isNull(email)) this.get(pos).setEmail(email);
         return true;
     }
-
     //update user - delete
     public boolean deleteUser() {
         Scanner sc = new Scanner(System.in);
@@ -303,32 +310,30 @@ public class UserList extends ArrayList<User> {
 
         System.out.println("Confirm delete? [Y/n]");
         if (sc.nextLine().equals("Y")) this.remove(pos);
-        else return false;          //do nothing
-
-        return true;
-    }
-
-    //write list to file
-    public boolean writeFile() {
-
-        try {
-            FileWriter writer = new FileWriter(PATH);
-
-            for (User user : this) writer.write(user.getUsername());
-
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+        else {
+            System.out.println("Delete user: Terminated!");
+            return false;          //do nothing
         }
 
         return true;
     }
+    //write list to file
+    public boolean writeFile() {
+        try {
+            FileWriter writer = new FileWriter(PATH);
+            for (User user : this) writer.write(user.toString()+"\n");
+            writer.close();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error: Write file failed!");
+            return false;
+        }
+        return true;
+    }
     //print list in file
-    //note: no sort
+    //note: no add to collection && sort
     public boolean printFile() {
-
         try {
             File f = new File(PATH);
             Scanner reader = new Scanner(f);
@@ -341,6 +346,7 @@ public class UserList extends ArrayList<User> {
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error: Printing file failed!");
             return false;
         }
         return true;
