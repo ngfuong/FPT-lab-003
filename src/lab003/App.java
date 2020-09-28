@@ -7,22 +7,7 @@ public class App {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         FileIO fio = new FileIO();
-
-        /*BEGIN OF FILE IO*/
-        //category
-        System.out.println("Enter category file name: ");
-        String cName = sc.nextLine();
-        String cPath = fio.getFilePath(cName.length()>0 ? cName:"category.txt");
-        File cFile = fio.readData(cPath, "c");
-        //product
-        System.out.println("Enter product file name: ");
-        String pName = sc.nextLine();
-        String pPath = fio.getFilePath(pName.length()>0 ? pName:"product.txt");
-        File pFile = fio.readData(pPath, "p");
-        /*ENF OF FILE IO*/
-
-        CategoryList categoryList = CategoryList.readData();
-        ProductList productList = ProductList.readData();
+        Utility util = new Utility();
 
         MenuList mainList= new MenuList();
 
@@ -44,6 +29,22 @@ public class App {
         mainList.add(orderProduct);
         mainList.add(showOrderList);
 
+        /*BEGIN OF FILE IO*/
+        //category
+        System.out.println("Enter category file name: ");
+        String cName = sc.nextLine();
+        String cPath = fio.getFilePath(cName.length()>0 ? cName:"category.txt");
+        File cFile = fio.readData(cPath, "c");
+        //product
+        System.out.println("Enter product file name: ");
+        String pName = sc.nextLine();
+        String pPath = fio.getFilePath(pName.length()>0 ? pName:"product.txt");
+        File pFile = fio.readData(pPath, "p");
+
+        CategoryList categoryList = CategoryList.readData();
+        ProductList productList = ProductList(categoryList);
+        /*ENF OF FILE IO*/
+
         /*BEGIN OF MAIN MENU*/
         int listChoice;
         do {
@@ -56,11 +57,15 @@ public class App {
                     menuChoice = mainList.get(listChoice-1).getMenuChoice();
                     if (menuChoice<=mainList.get(listChoice-1).size() && menuChoice>=1){
                         switch (menuChoice) {
-                            case 1:
-                                listChoice==2? categoryList.updateCategory() : productList.updateProduct();
+                            case 1: //updating
+                                listChoice==2?
+                                        util.printStatus(categoryList.updateCategory()) :
+                                        util.printStatus(productList.updateProduct());
                                 break;
-                            case 2:
-                                listChoice==2? categoryList.deleteCategory() : productList.deleteProduct();
+                            case 2: //deleting
+                                listChoice==2?
+                                        util.printStatus(categoryList.deleteCategory()) :
+                                        util.printStatus(productList.deleteProduct());
                                 break;
                             default:
                                 System.out.println("Exiting menu...");
@@ -73,9 +78,16 @@ public class App {
             else  {
                 switch(listChoice) {
                     case 1:
+                        //add new category
+                        util.printStatus(categoryList.addCategory());
                     case 3:
+                        //add new product
+                        util.printStatus(productList.addProduct());
                     case 5:
+                        //order product
+                        //util.printStatus(orderList.)
                     case 6:
+                        //view order list
                     default:
                         System.out.println("Exiting program...");
                 }
