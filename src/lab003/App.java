@@ -1,12 +1,7 @@
 package lab003;
 
-import java.io.*;
-import java.util.Scanner;
-
 public class App {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        FileIO fio = new FileIO();
         Utility util = new Utility();
 
         MenuList mainList= new MenuList();
@@ -35,6 +30,8 @@ public class App {
         ProductList productList = new ProductList(categoryList);
         productList.readData();
         /*ENF OF FILE IO*/
+
+        OrderList orderList = new OrderList(productList);
 
         /*BEGIN OF MAIN MENU*/
         int listChoice;

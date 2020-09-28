@@ -248,16 +248,4 @@ public class ProductList extends ArrayList<Product> {
 
         return true;
     }
-    public void displayProduct(){
-
-    }
-    public boolean orderProduct(){
-        Scanner sc = new Scanner(System.in);
-        String choice;
-
-        displayProduct();
-        System.out.println("Select product (no): ");
-
-        return true;
-    }
 }
