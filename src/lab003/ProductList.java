@@ -14,19 +14,11 @@ public class ProductList extends ArrayList<Product> {
         this.categoryList = categoryList;
     }
 
-    public CategoryList getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(CategoryList categoryList) {
-        this.categoryList = categoryList;
-    }
-
     /*BEGIN OF FILE IO*/
-    final static String PATH = System.getProperty("user.dir") + "/";
-    public static ProductList readData() {
+    final String PATH = System.getProperty("user.dir") + "/";
+    public void readData() {
         Scanner sc = new Scanner(System.in);
-        ProductList list = new ProductList();
+        //ProductList list = new ProductList();
 
         System.out.println("Enter product file name: ");
         String fName = sc.nextLine();
@@ -46,13 +38,13 @@ public class ProductList extends ArrayList<Product> {
                 double price = Double.parseDouble(line.split(delim)[8]);
                 int quantity = Integer.parseInt(line.split(delim)[10]);
 
-                list.add(new Product(id, name, cId, price, quantity));
+                this.add(new Product(id, name, cId, price, quantity));
             }
-            return list;
+            //return list;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error: Read file failed!");
-            return list;
+            //return list;
         }
     }
     /*END OF FILE IO*/
@@ -266,7 +258,6 @@ public class ProductList extends ArrayList<Product> {
         displayProduct();
         System.out.println("Select product (no): ");
 
-
-
+        return true;
     }
 }

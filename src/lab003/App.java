@@ -30,19 +30,10 @@ public class App {
         mainList.add(showOrderList);
 
         /*BEGIN OF FILE IO*/
-        //category
-        System.out.println("Enter category file name: ");
-        String cName = sc.nextLine();
-        String cPath = fio.getFilePath(cName.length()>0 ? cName:"category.txt");
-        File cFile = fio.readData(cPath, "c");
-        //product
-        System.out.println("Enter product file name: ");
-        String pName = sc.nextLine();
-        String pPath = fio.getFilePath(pName.length()>0 ? pName:"product.txt");
-        File pFile = fio.readData(pPath, "p");
-
-        CategoryList categoryList = CategoryList.readData();
-        ProductList productList = ProductList(categoryList);
+        CategoryList categoryList = new CategoryList();
+        categoryList.readData();
+        ProductList productList = new ProductList(categoryList);
+        productList.readData();
         /*ENF OF FILE IO*/
 
         /*BEGIN OF MAIN MENU*/
@@ -58,14 +49,14 @@ public class App {
                     if (menuChoice<=mainList.get(listChoice-1).size() && menuChoice>=1){
                         switch (menuChoice) {
                             case 1: //updating
-                                listChoice==2?
-                                        util.printStatus(categoryList.updateCategory()) :
-                                        util.printStatus(productList.updateProduct());
+                                if (listChoice==2)
+                                        util.printStatus(categoryList.updateCategory());
+                                else util.printStatus(productList.updateProduct());
                                 break;
                             case 2: //deleting
-                                listChoice==2?
-                                        util.printStatus(categoryList.deleteCategory()) :
-                                        util.printStatus(productList.deleteProduct());
+                                if (listChoice==2)
+                                        util.printStatus(categoryList.deleteCategory());
+                                else util.printStatus(productList.deleteProduct());
                                 break;
                             default:
                                 System.out.println("Exiting menu...");

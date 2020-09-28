@@ -10,10 +10,10 @@ public class CategoryList extends ArrayList<Category> {
     }
 
     /*BEGIN OF FILE IO*/
-    final static String PATH = System.getProperty("user.dir") + "/";
-    public static CategoryList readData() {
+    final String PATH = System.getProperty("user.dir") + "/";
+    public void readData() {
         Scanner sc = new Scanner(System.in);
-        CategoryList list = new CategoryList();
+        //CategoryList list = new CategoryList();
 
         System.out.println("Enter category file name: ");
         String fName = sc.nextLine();
@@ -30,13 +30,13 @@ public class CategoryList extends ArrayList<Category> {
                 String id = line.split(delim)[2];
                 String name = line.split(delim)[4];
 
-                list.add(new Category(id, name));
+                this.add(new Category(id, name));
             }
-            return list;
+            //return list;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error: Read file failed!");
-            return list;
+            //return list;
         }
     }
     /*END OF FILE IO*/
