@@ -1,3 +1,5 @@
+package lab002;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -57,7 +59,7 @@ public class UserList extends ArrayList<User> {
                 return -1;
             }
             else if (checkExist(username)==-2)
-                System.out.println("Error: User name not exist!");
+                System.out.println("Error: lab002.User name not exist!");
 
         } while (/*isNull(username) |*/ checkExist(username)==-2);
 
@@ -232,7 +234,7 @@ public class UserList extends ArrayList<User> {
             return false;
         }
         else {
-            System.out.println("User information: ");
+            System.out.println("lab002.User information: ");
             for (User user: list)
                 System.out.println(user.toString());
         }
@@ -373,7 +375,7 @@ public class UserList extends ArrayList<User> {
                 int pos = this.search(username);
                 if (pos==-1){
                     this.add(new User(username, fName, lName, password, confirm, phone, email));
-                    System.out.println("User " + username+ " added!");
+                    System.out.println("lab002.User " + username+ " added!");
                 }
             }
             reader.close();

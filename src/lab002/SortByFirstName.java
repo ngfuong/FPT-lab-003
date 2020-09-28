@@ -1,3 +1,5 @@
+package lab002;
+
 import java.util.Comparator;
 public class SortByFirstName implements Comparator<User> {
     @Override

@@ -1,3 +1,5 @@
+package lab002;
+
 public class User {
     String username, fName, lName, password, confirm, phone, email;
 
@@ -73,7 +75,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "lab002.User{" +
                 "username:'" + username + '\'' +
                 ",fName:'" + fName + '\'' +
                 ",lName:'" + lName + '\'' +
