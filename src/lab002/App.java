@@ -3,7 +3,8 @@ package lab002;
 public class App {
 
     public static void main(String[] argv) {
-        UserList userList = new UserList();
+
+        UserList userList = UserList.readData();
 
         MenuList mainList = new MenuList();
 
@@ -72,7 +73,7 @@ public class App {
                         break;
                     case 5:
                         //Save list to file
-                        userList.printStatus(userList.writeFile());
+                        userList.printStatus(userList.saveData());
                         break;
                     case 6:
                         //Print list out

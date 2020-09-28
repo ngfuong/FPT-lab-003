@@ -14,6 +14,7 @@ public class UserList extends ArrayList<User> {
     /*BEGIN OF DATA VALIDATION*/
     //search username in list
     private int search(String username) {
+
         for (int i=0; i<this.size();i++)
             if (this.get(i).getUsername().equals(username))
                 return i;
@@ -332,27 +333,67 @@ public class UserList extends ArrayList<User> {
 
         return true;
     }
-    //write list to file
-    //****************UPDATE THIS
+
+    //read initial data
+    public static UserList readData() {
+        UserList list = new UserList();
+
+        try {
+            File f = new File(System.getProperty("user.dir") + "/user.txt");
+            Scanner reader = new Scanner(f);
+
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                String delim = "[{}:',]+";
+                String username = line.split(delim)[2];
+                String fName = line.split(delim)[4];
+                String lName = line.split(delim)[6];
+                String password = line.split(delim)[8];
+                String confirm = password;
+                String phone = line.split(delim)[10];
+                String email = line.split(delim)[12];
+
+                list.add(new User(username, fName, lName, password, confirm, phone, email));
+            }
+
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        }
+    }
+
+    /*WRITE FILE: OBSOLETE
     public boolean writeFile() {
         try {
-            File f = new File(PATH);
-            if (!f.exists()) f.createNewFile();
+            this.saveData();
 
-            //append == true
-            FileWriter writer = new FileWriter(f.getName(), true);
-            for (User user : this) writer.write(user.toString()+"\n");
-            writer.close();
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error: Write file failed!");
             return false;
         }
         return true;
     }
+    */
+    //write list to file
+    public boolean saveData() {
+        try {
+            File f = new File(System.getProperty("user.dir") + "/user.txt");
+            FileWriter write = new FileWriter(f.getName(), false);
+
+            for (User user: this)
+                write.write(user.toString()+"\n");
+
+            write.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     //print list in file
-    //note: no add to collection && sort
     public boolean printFile() {
         try {
             File f = new File(PATH);
@@ -393,6 +434,7 @@ public class UserList extends ArrayList<User> {
         }
         return true;
     }
+
     /*END OF OPTIONS*/
 }
 

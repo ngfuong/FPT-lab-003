@@ -1,2 +1,2 @@
-lab002.User{username:'linh123',fName:'linh',lName:'nguyen',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0768856268',email:'linh@gmail.com'}
-lab002.User{username:'linh123',fName:'phuong',lName:'nguyen',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0768856268',email:'linh@gmail.com'}
+User{username:'phuong123',fName:'phuong',lName:'le',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0123123123',email:'123@a.com'}
+User{username:'tuan123',fName:'tuan',lName:'nguyen',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0123123123',email:'123@123.com'}
