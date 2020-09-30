@@ -44,7 +44,7 @@ public class CategoryList extends ArrayList<Category> {
     /*END OF FILE IO*/
 
     /*BEGIN OF DATA VALIDATION*/
-    private int searchID(String id) {
+    public int searchID(String id) {
         for (int i=0; i<this.size(); i++)
             if (this.get(i).id.equals(id))
                 return i;

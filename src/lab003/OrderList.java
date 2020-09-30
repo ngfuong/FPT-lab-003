@@ -24,12 +24,12 @@ public class OrderList extends ArrayList<Order> {
 
     public void displayOrderList() {
         //print header
-        System.out.format("%5s %10s %5s %5s %5s %5s %5s",
+        System.out.format("%5s %10s %5s %5s %5s %5s %5s\n",
                         "Product", "|", "Quantity", "|", "Price", "|", "Amount");
-        System.out.println("----------------------------------------------------");
+        System.out.println("-----------------------------------------------------------");
         //print invoice
         for (Order order: this) {
-            System.out.format("%5s %10s %5d %5s %5.2f %5s %5d",
+            System.out.format("%5s %10s %5d %5s %5.2f %5s %5f\n",
                     order.product, "|", order.quantity, "|", order.price, "|", order.amount);
             this.total += order.amount;
         }

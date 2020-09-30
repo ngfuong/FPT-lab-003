@@ -19,19 +19,21 @@ public class Customer extends ArrayList<OrderList> {
         int choice, quantity;
         boolean cont;
 
-        if (this.isEmpty()) {
-            System.out.println("Error: List empty!");
+        if (this.productList == null) {
+            System.out.println("Error: Product list empty!");
             return false;
         }
 
         //create new order
-        OrderList orderList = new OrderList();
+        OrderList orderList = new OrderList(this.productList);
         do {
             orderList.productList.displayProduct();
             do {
                 System.out.println("Select product (no): ");
                 choice = Integer.parseInt(sc.nextLine());
-            } while (choice < 1 | choice > this.size());
+                if (choice<1 | choice>productList.size())
+                    System.out.println("Error: Choice out of bounds!");
+            } while (choice<1 | choice>productList.size());
 
             Product product = productList.get(choice - 1);
 
@@ -41,7 +43,7 @@ public class Customer extends ArrayList<OrderList> {
             orderList.add(new Order(product.name, product.price, quantity));
 
             System.out.println("Do you want to order now? (Y/[N])");
-            cont = (sc.nextLine().equals("Y"))? true:false;
+            cont = (sc.nextLine().equals("Y"))? false:true;
         } while (cont);
 
         System.out.println("Input your name: ");
@@ -51,11 +53,17 @@ public class Customer extends ArrayList<OrderList> {
         return true;
     }
 
-    public void viewOrderList() {
+    public boolean viewOrderList() {
+        if (this.isEmpty()) {
+            System.out.println("Error: List empty!");
+            return false;
+        }
+
         for (OrderList list: this) {
             System.out.println("Customer: " + list.name);
             list.displayOrderList();
         }
+        return true;
     }
 
 }

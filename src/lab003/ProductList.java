@@ -64,12 +64,14 @@ public class ProductList extends ArrayList<Product> {
     private boolean isQuantity(int quantity) {
         return (quantity>0);
     }
+    /*USE SEARCHID IN CATEGORYLIST INSTEAD*/
     private int getCategoryPos(String cId) {
         for (int i=0; i<this.size(); i++)
             if (categoryList.get(i).id.equals(cId)) return i;
 
         return -1;
     }
+    /*END*/
     private boolean isNull(String s) {
         return s.length()==0;
     }
@@ -80,7 +82,7 @@ public class ProductList extends ArrayList<Product> {
         String id, cId, name;
         double price;
         int quantity;
-        int pos=-1;
+        int pos;
 
         if (categoryList.isEmpty()) {
             System.out.println("Error: Insufficient categories!");
@@ -133,9 +135,9 @@ public class ProductList extends ArrayList<Product> {
         do {
             System.out.println("Enter category ID: ");
             cId = sc.nextLine();
-            if (getCategoryPos(cId)==-1)
+            if (this.categoryList.searchID(cId)==-1)
                 System.out.println("Error: ID not existed!");
-        } while (getCategoryPos(cId)==-1);
+        } while (this.categoryList.searchID(cId)==-1);
 
         try {
             this.add(new Product(id, name, cId, price, quantity));
@@ -253,13 +255,13 @@ public class ProductList extends ArrayList<Product> {
     public void displayProduct(){
         //print header
         System.out.println("Product listing:");
-        System.out.format("%5s %5s %20s %15s %10s",
+        System.out.format("%5s %5s %20s %15s %10s\n",
                 "No", "|", "Product name", "|", "Price");
-        System.out.println("-----------------------------------------");
+        System.out.println("---------------------------------------------------------------");
         //print invoice
         int count = 1;
         for (Product product: this) {
-            System.out.format("%5d %5s %20s %15s %10f.2",
+            System.out.format("%5d %5s %20s %15s %10.2f\n",
                     count, "|", product.name, "|", product.price);
             count++;
         }
