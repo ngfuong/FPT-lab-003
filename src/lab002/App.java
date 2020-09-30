@@ -4,18 +4,19 @@ public class App {
 
     public static void main(String[] argv) {
 
-        UserList userList = UserList.readData();
+        UserList userList = new UserList();
+        userList = userList.readData();
 
         MenuList mainList = new MenuList();
 
         Menu addUser = new Menu("Add new user");
-        Menu checkExist = new Menu("Check user existence");
-        Menu searchName = new Menu("Get user info by name");
-        Menu updateUser = new Menu("Update user");
+        Menu checkExist = new Menu("Check username existence in file");
+        Menu searchName = new Menu("Get information in list via name");
+        Menu updateUser = new Menu("Update user in list");
         updateUser.add("Update user");
         updateUser.add("Delete user");
         Menu writeFile = new Menu("Save user list to file");
-        Menu printFile = new Menu("Print user list from file");
+        Menu printFile = new Menu("Print all user list");
 
         mainList.add(addUser);
         mainList.add(checkExist);

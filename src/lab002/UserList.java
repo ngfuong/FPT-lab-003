@@ -14,7 +14,6 @@ public class UserList extends ArrayList<User> {
     /*BEGIN OF DATA VALIDATION*/
     //search username in list
     private int search(String username) {
-
         for (int i=0; i<this.size();i++)
             if (this.get(i).getUsername().equals(username))
                 return i;
@@ -50,7 +49,6 @@ public class UserList extends ArrayList<User> {
         do {
             System.out.println("Enter username: ");
             username = sc.nextLine();
-            //if (isNull(username)) System.out.println("Error: Input cannot be null!");
             if (checkExist(username)==0) {
                 System.out.println("Error: Read file failed!!");
                 return -1;
@@ -61,8 +59,7 @@ public class UserList extends ArrayList<User> {
             }
             else if (checkExist(username)==-2)
                 System.out.println("Error: lab002.User name not exist!");
-
-        } while (/*isNull(username) |*/ checkExist(username)==-2);
+        } while (checkExist(username)==-2);
 
         do {
             System.out.println("Enter password: ");
@@ -77,9 +74,9 @@ public class UserList extends ArrayList<User> {
     }
     //check exist with argument
     private int checkExist(String username) {
-
         try {
             File f = new File(PATH);
+
             if (f.length()==0) {
                 //file empty
                 return -1;
@@ -88,8 +85,10 @@ public class UserList extends ArrayList<User> {
 
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
+                String delimiter = "[{}:',]+";
                 //exist
-                if (line.contains(username)) return 1;
+                if (line.split(delimiter)[2].equals(username))
+                    return 1;
             }
             //not exist
             return -2;
@@ -112,6 +111,36 @@ public class UserList extends ArrayList<User> {
             e.printStackTrace();
             System.out.println("Encryption failed!");
             return null;
+        }
+    }
+    //read initial data
+    public UserList readData() {
+        UserList list = new UserList();
+
+        try {
+            File f = new File(System.getProperty("user.dir") + "/user.txt");
+
+            Scanner reader = new Scanner(f);
+
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                String delim = "[{}:',]+";
+                String username = line.split(delim)[2];
+                String fName = line.split(delim)[4];
+                String lName = line.split(delim)[6];
+                String password = line.split(delim)[8];
+                String confirm = password;
+                String phone = line.split(delim)[10];
+                String email = line.split(delim)[12];
+
+                list.add(new User(username, fName, lName, password, confirm, phone, email));
+            }
+
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
         }
     }
     //print operation status
@@ -203,7 +232,6 @@ public class UserList extends ArrayList<User> {
 
         return (checkExist(username)==1);
     }
-    //search information by name
     //output list of user info
     public boolean searchName() {
         Scanner sc = new Scanner(System.in);
@@ -247,14 +275,9 @@ public class UserList extends ArrayList<User> {
         Scanner sc = new Scanner(System.in);
         String fName, lName, password, confirm, phone, email;
 
-        /*
-        if (this.isEmpty()) {
-            return false;
-        }
-        */
-
         int pos = login();
         if (pos==-1) {
+            System.out.println("Error: Login failed!");
             return false;
         }
 
@@ -331,37 +354,9 @@ public class UserList extends ArrayList<User> {
             return false;          //do nothing
         }
 
+        this.saveData();
+
         return true;
-    }
-
-    //read initial data
-    public static UserList readData() {
-        UserList list = new UserList();
-
-        try {
-            File f = new File(System.getProperty("user.dir") + "/user.txt");
-            Scanner reader = new Scanner(f);
-
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                String delim = "[{}:',]+";
-                String username = line.split(delim)[2];
-                String fName = line.split(delim)[4];
-                String lName = line.split(delim)[6];
-                String password = line.split(delim)[8];
-                String confirm = password;
-                String phone = line.split(delim)[10];
-                String email = line.split(delim)[12];
-
-                list.add(new User(username, fName, lName, password, confirm, phone, email));
-            }
-
-            return list;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return list;
-        }
     }
 
     /*WRITE FILE: OBSOLETE
@@ -377,6 +372,7 @@ public class UserList extends ArrayList<User> {
         return true;
     }
     */
+
     //write list to file
     public boolean saveData() {
         try {
@@ -397,7 +393,7 @@ public class UserList extends ArrayList<User> {
     public boolean printFile() {
         try {
             File f = new File(PATH);
-            if (!f.exists()) return false;
+            if (!f.exists()) f.createNewFile();
 
             Scanner reader = new Scanner(f);
 
@@ -412,9 +408,9 @@ public class UserList extends ArrayList<User> {
                 String phone = line.split(delim)[10];
                 String email = line.split(delim)[12];
 
-                //add user to current session's list
+                //add user to list in memory
                 int pos = this.search(username);
-                if (pos==-1){
+                if (pos==-1){   //check if username is not duplicate
                     this.add(new User(username, fName, lName, password, confirm, phone, email));
                     System.out.println("lab002.User " + username+ " added!");
                 }
@@ -427,12 +423,13 @@ public class UserList extends ArrayList<User> {
             for (User user: this)
                 System.out.println(user.toString());
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error: Printing file failed!");
             return false;
         }
-        return true;
     }
 
     /*END OF OPTIONS*/
