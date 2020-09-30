@@ -26,6 +26,7 @@ public class ProductList extends ArrayList<Product> {
 
         try {
             File f = new File(PATH + fName);
+            if (!f.exists()) f.createNewFile();
             Scanner reader = new Scanner(f);
 
             while (reader.hasNextLine()) {
@@ -248,4 +249,20 @@ public class ProductList extends ArrayList<Product> {
 
         return true;
     }
+    /*UTIL*/
+    public void displayProduct(){
+        //print header
+        System.out.println("Product listing:");
+        System.out.format("%5s %5s %20s %15s %10s",
+                "No", "|", "Product name", "|", "Price");
+        System.out.println("-----------------------------------------");
+        //print invoice
+        int count = 1;
+        for (Product product: this) {
+            System.out.format("%5d %5s %20s %15s %10f.2",
+                    count, "|", product.name, "|", product.price);
+            count++;
+        }
+    }
+    /*END OF UTIL*/
 }

@@ -21,6 +21,8 @@ public class CategoryList extends ArrayList<Category> {
 
         try {
             File f = new File(PATH + fName);
+            if (!f.exists()) f.createNewFile();
+
             Scanner reader = new Scanner(f);
 
             while (reader.hasNextLine()) {

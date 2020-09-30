@@ -31,7 +31,7 @@ public class App {
         productList.readData();
         /*ENF OF FILE IO*/
 
-        OrderList orderList = new OrderList(productList);
+        Customer customerList = new Customer();
 
         /*BEGIN OF MAIN MENU*/
         int listChoice;
@@ -68,14 +68,19 @@ public class App {
                     case 1:
                         //add new category
                         util.printStatus(categoryList.addCategory());
+                        break;
                     case 3:
                         //add new product
                         util.printStatus(productList.addProduct());
+                        break;
                     case 5:
                         //order product
-                        //util.printStatus(orderList.)
+                        util.printStatus(customerList.makeOrder());
+                        break;
                     case 6:
                         //view order list
+                        customerList.viewOrderList();
+                        break;
                     default:
                         System.out.println("Exiting program...");
                 }
