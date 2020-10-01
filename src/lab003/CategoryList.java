@@ -13,6 +13,7 @@ public class CategoryList extends ArrayList<Category> {
     final String PATH = System.getProperty("user.dir") + "/";
     public void readData() {
         Scanner sc = new Scanner(System.in);
+        //uncomment de them doi^' so^'
         //CategoryList list = new CategoryList();
 
         System.out.println("Enter category file name: ");
@@ -21,7 +22,6 @@ public class CategoryList extends ArrayList<Category> {
 
         try {
             File f = new File(PATH + fName);
-            if (!f.exists()) f.createNewFile();
 
             Scanner reader = new Scanner(f);
 
@@ -51,9 +51,9 @@ public class CategoryList extends ArrayList<Category> {
 
         return -1;
     }
-    private int searchName(String name){
-        for (int i=0;i<this.size();i++)
-            if (this.get(i).name.equalsIgnoreCase(name))
+    private int searchName(String name, CategoryList list){
+        for (int i=0;i<list.size();i++)
+            if (list.get(i).name.equalsIgnoreCase(name))
                 return i;
 
         return -1;
@@ -78,8 +78,8 @@ public class CategoryList extends ArrayList<Category> {
             System.out.println("Enter new category name: ");
             name = sc.nextLine();
             if (isNull(name)) System.out.println("Error: Input cannot be null!");
-            if (searchName(id) != -1) System.out.println("Error: Name existed!");
-        } while (isNull(name) | searchName(name)!=-1);
+            if (searchName(id, this) != -1) System.out.println("Error: Name existed!");
+        } while (isNull(name) | searchName(name, this)!=-1);
 
         try {
             this.add(new Category(id, name));
@@ -111,8 +111,17 @@ public class CategoryList extends ArrayList<Category> {
             }
         } while (isNull(id) | pos==-1);
 
-        System.out.println("Update category name:");
-        name = sc.nextLine();
+        CategoryList temp_list = this;
+        temp_list.remove(pos);
+        boolean cont=false;
+
+        do {
+            System.out.println("Update category name:");
+            name = sc.nextLine();
+            if (!isNull(name))
+                for (Category category: temp_list)
+                    if (category.name.equals(name)) cont=true;
+        } while (cont);
 
         if (!isNull(name)) this.get(pos).setName(name);
         return true;
@@ -120,7 +129,7 @@ public class CategoryList extends ArrayList<Category> {
     public boolean deleteCategory() {
         Scanner sc = new Scanner(System.in);
         String id;
-        int pos = -1;
+        int pos;
 
         if (this.isEmpty()) {
             System.out.println("Error: List empty!");

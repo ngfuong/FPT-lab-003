@@ -43,7 +43,7 @@ public class Customer extends ArrayList<OrderList> {
             orderList.add(new Order(product.name, product.price, quantity));
 
             System.out.println("Do you want to order now? (Y/[N])");
-            cont = (sc.nextLine().equals("Y"))? false:true;
+            cont = (!sc.nextLine().equals("Y"));
         } while (cont);
 
         System.out.println("Input your name: ");

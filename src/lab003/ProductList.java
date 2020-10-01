@@ -26,7 +26,6 @@ public class ProductList extends ArrayList<Product> {
 
         try {
             File f = new File(PATH + fName);
-            if (!f.exists()) f.createNewFile();
             Scanner reader = new Scanner(f);
 
             while (reader.hasNextLine()) {
@@ -43,8 +42,8 @@ public class ProductList extends ArrayList<Product> {
             }
             //return list;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error: Read file failed!");
+            //e.printStackTrace();
+            //System.out.println("Error: Read file failed!");
             //return list;
         }
     }
