@@ -58,7 +58,7 @@ public class UserList extends ArrayList<User> {
                 return -1;
             }
             else if (checkExist(username)==-2)
-                System.out.println("Error: lab002.User name not exist!");
+                System.out.println("Error: User name not exist!");
         } while (checkExist(username)==-2);
 
         do {
@@ -119,6 +119,7 @@ public class UserList extends ArrayList<User> {
 
         try {
             File f = new File(System.getProperty("user.dir") + "/user.txt");
+            if (!f.exists()) f.createNewFile();
 
             Scanner reader = new Scanner(f);
 
@@ -139,7 +140,7 @@ public class UserList extends ArrayList<User> {
             return list;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return list;
         }
     }
@@ -263,7 +264,7 @@ public class UserList extends ArrayList<User> {
             return false;
         }
         else {
-            System.out.println("lab002.User information: ");
+            System.out.println("User information: ");
             for (User user: list)
                 System.out.println(user.toString());
         }
@@ -376,7 +377,8 @@ public class UserList extends ArrayList<User> {
     //write list to file
     public boolean saveData() {
         try {
-            File f = new File(System.getProperty("user.dir") + "/user.txt");
+            File f = new File(PATH);
+            if (!f.exists()) f.createNewFile();
             FileWriter write = new FileWriter(f.getName(), false);
 
             for (User user: this)
@@ -385,7 +387,7 @@ public class UserList extends ArrayList<User> {
             write.close();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         }
     }
@@ -412,7 +414,7 @@ public class UserList extends ArrayList<User> {
                 int pos = this.search(username);
                 if (pos==-1){   //check if username is not duplicate
                     this.add(new User(username, fName, lName, password, confirm, phone, email));
-                    System.out.println("lab002.User " + username+ " added!");
+                    System.out.println("User " + username+ " added!");
                 }
             }
             reader.close();
@@ -426,8 +428,8 @@ public class UserList extends ArrayList<User> {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error: Printing file failed!");
+            //e.printStackTrace();
+            //System.out.println("Error: Printing file failed!");
             return false;
         }
     }

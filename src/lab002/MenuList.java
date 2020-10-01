@@ -20,7 +20,7 @@ public class MenuList extends ArrayList<Menu> {
         this.printList();
 
         System.out.println("+++++++++++++++++++++++");
-        System.out.println("lab002.User choice: ");
+        System.out.println("User choice: ");
         //return choice
         return Integer.parseInt(sc.nextLine());
 

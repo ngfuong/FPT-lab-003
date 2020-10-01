@@ -56,7 +56,7 @@ public class Menu extends ArrayList<String>{
         this.printMenu();
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("lab002.User option:");
+        System.out.println("User option:");
 
         System.out.println("+++++++++++++++++++++++");
 

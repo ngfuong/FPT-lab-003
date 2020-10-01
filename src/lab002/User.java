@@ -75,7 +75,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "lab002.User{" +
+        return "User{" +
                 "username:'" + username + '\'' +
                 ",fName:'" + fName + '\'' +
                 ",lName:'" + lName + '\'' +

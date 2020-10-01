@@ -1,4 +1,0 @@
-lab002.User{username:'user01',fName:'abc',lName:'abc',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0123123123',email:'123@123.co'}
-lab002.User{username:'bruh123',fName:'burh',lName:'@!#!#',password:'cFe3ifgr9gWQ65O/V0ciNASCPsIoGCU0kiAknT9I0pc=',phone:'0123123123',email:'a.a@c.c'}
-lab002.User{username:'phuong123',fName:'phuong',lName:'le',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0123123123',email:'123@a.com'}
-lab002.User{username:'tuan123',fName:'tuan',lName:'nguyen',password:'lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4=',phone:'0123123123',email:'123@123.com'}
