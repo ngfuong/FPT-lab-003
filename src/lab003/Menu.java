@@ -51,6 +51,7 @@ public class Menu extends ArrayList<String>{
     }
 
     public int getMenuChoice() {
+        /*
         System.out.println("+++++++++++++++++++++++");
 
         this.printMenu();
@@ -62,5 +63,26 @@ public class Menu extends ArrayList<String>{
 
         //return subChoice
         return Integer.parseInt(sc.nextLine());
+
+         */
+        Scanner sc = new Scanner(System.in);
+        int choice=-1;
+
+        this.printMenu();
+
+        System.out.println("+++++++++++++++++++++++");
+
+        boolean cont;
+        do {
+            System.out.println("User choice: ");
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+                cont = false;
+            } catch (Exception e) {
+                System.out.println("Error: Input must be a number!");
+                cont=true;
+            }
+        } while (cont);
+        return choice;
     }
 }
