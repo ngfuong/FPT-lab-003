@@ -1,5 +1,6 @@
 package lab002;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -55,12 +56,23 @@ public class Menu extends ArrayList<String>{
 
         this.printMenu();
 
+        int choice=-1;
         Scanner sc = new Scanner(System.in);
-        System.out.println("User option:");
 
         System.out.println("+++++++++++++++++++++++");
 
-        //return subChoice
-        return Integer.parseInt(sc.nextLine());
+        boolean cont;
+        do {
+            System.out.println("User choice: ");
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+                cont= false;
+            } catch (Exception e) {
+                System.out.println("Error: Input must be a number!");
+                cont=true;
+            }
+        } while (cont);
+
+        return choice;
     }
 }

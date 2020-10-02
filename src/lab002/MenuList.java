@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MenuList extends ArrayList<Menu> {
 
     public void printList() {
-        System.out.println("++++ GRADE MANAGER ++++");
+        System.out.println("++++ USER MANAGER ++++");
         int i = 1;
         for (Menu menu: this) {
             menu.print(i++);
@@ -16,13 +16,24 @@ public class MenuList extends ArrayList<Menu> {
 
     public int getListChoice() {
         Scanner sc = new Scanner(System.in);
+        int choice=-1;
 
         this.printList();
 
         System.out.println("+++++++++++++++++++++++");
-        System.out.println("User choice: ");
-        //return choice
-        return Integer.parseInt(sc.nextLine());
 
+        boolean cont;
+        do {
+            System.out.println("User choice: ");
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+                cont = false;
+            } catch (Exception e) {
+                System.out.println("Error: Input must be a number!");
+                cont=true;
+            }
+        } while (cont);
+
+        return choice;
     }
 }
