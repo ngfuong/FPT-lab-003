@@ -91,7 +91,7 @@ public class UserList extends ArrayList<User> {
                     return 1;
             }
             //not exist
-            return -2;
+            return 2;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -219,7 +219,7 @@ public class UserList extends ArrayList<User> {
             return false;
         }
     }
-    //check exist
+    //check exist in file
     public boolean checkExist() {
         Scanner sc = new Scanner(System.in);
         String username;
@@ -231,6 +231,21 @@ public class UserList extends ArrayList<User> {
                 System.out.println("Error: Input cannot be null!");
         } while (isNull(username));
 
+        int status = checkExist(username);
+        switch (status) {
+            case -1:
+                System.out.println("Error: File empty!");
+                return false;
+            case 1:
+                System.out.println("Username exist!");
+                return true;
+            case 2:
+                System.out.println("Username not exist!");
+                return true;
+            case 0:
+                System.out.println("Error: Read file failed!");
+                return false;
+        }
         return (checkExist(username)==1);
     }
     //output list of user info
@@ -331,6 +346,9 @@ public class UserList extends ArrayList<User> {
         }
         if (!isNull(phone)) this.get(pos).setPhone(phone);
         if (!isNull(email)) this.get(pos).setEmail(email);
+
+        //SAVE TO FILE
+        //this.saveData();
         return true;
     }
     //update user - delete
@@ -355,7 +373,8 @@ public class UserList extends ArrayList<User> {
             return false;          //do nothing
         }
 
-        this.saveData();
+        //SAVE TO FILE
+        //this.saveData();
 
         return true;
     }
@@ -376,6 +395,10 @@ public class UserList extends ArrayList<User> {
 
     //write list to file
     public boolean saveData() {
+        if (this.isEmpty()) {
+            System.out.println("Error: Memory empty!");
+            return false;
+        }
         try {
             File f = new File(PATH);
             if (!f.exists()) f.createNewFile();
@@ -395,37 +418,46 @@ public class UserList extends ArrayList<User> {
     public boolean printFile() {
         try {
             File f = new File(PATH);
-            if (!f.exists()) f.createNewFile();
-
-            Scanner reader = new Scanner(f);
-
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                String delim = "[{}:',]+";
-                String username = line.split(delim)[2];
-                String fName = line.split(delim)[4];
-                String lName = line.split(delim)[6];
-                String password = line.split(delim)[8];
-                String confirm = password;
-                String phone = line.split(delim)[10];
-                String email = line.split(delim)[12];
-
-                //add user to list in memory
-                int pos = this.search(username);
-                if (pos==-1){   //check if username is not duplicate
-                    this.add(new User(username, fName, lName, password, confirm, phone, email));
-                    System.out.println("User " + username+ " added!");
-                }
+            if (!f.exists()) {
+                f.createNewFile();
+                System.out.println("Error: File not exist, created user.txt!");
+                return false;
             }
-            reader.close();
+            //if file exists
+            else {
+                Scanner reader = new Scanner(f);
+                while (reader.hasNextLine()) {
+                    String line = reader.nextLine();
+                    String delim = "[{}:',]+";
+                    String username = line.split(delim)[2];
+                    String fName = line.split(delim)[4];
+                    String lName = line.split(delim)[6];
+                    String password = line.split(delim)[8];
+                    String confirm = password;
+                    String phone = line.split(delim)[10];
+                    String email = line.split(delim)[12];
 
-            //printing
-            System.out.println("Printing all...");
-            Collections.sort(this, new SortByFirstName());
-            for (User user: this)
-                System.out.println(user.toString());
+                    //add user to list in memory
+                    int pos = this.search(username);
+                    if (pos == -1) {   //check if username is not duplicate
+                        this.add(new User(username, fName, lName, password, confirm, phone, email));
+                        System.out.println("User " + username + " added to list!");
+                    }
+                }
+                reader.close();
 
-            return true;
+                //printing
+                System.out.println("Printing all...");
+                Collections.sort(this, new SortByFirstName());
+                if (this.isEmpty()) {
+                    System.out.println("Error: Empty list!");
+                    return false;
+                }
+                for (User user : this)
+                    System.out.println(user.toString());
+
+                return true;
+            }
 
         } catch (Exception e) {
             //e.printStackTrace();

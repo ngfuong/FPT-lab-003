@@ -11,12 +11,12 @@ public class App {
 
         Menu addUser = new Menu("Add new user");
         Menu checkExist = new Menu("Check username existence in file");
-        Menu searchName = new Menu("Get information in list via name");
-        Menu updateUser = new Menu("Update user in list");
-        updateUser.add("Update user");
-        updateUser.add("Delete user");
-        Menu writeFile = new Menu("Save user list to file");
-        Menu printFile = new Menu("Print all user list");
+        Menu searchName = new Menu("Get information in memory by name");
+        Menu updateUser = new Menu("Update user in memory");
+        updateUser.add("Update user in memory");
+        updateUser.add("Delete user in memory");
+        Menu writeFile = new Menu("Save memory to file");
+        Menu printFile = new Menu("Print user list in file");
 
         mainList.add(addUser);
         mainList.add(checkExist);
